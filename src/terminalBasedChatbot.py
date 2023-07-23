@@ -72,7 +72,7 @@ def get_conversation_chain(vectorDb, largeLangModel):
 
 
 def main():
-    filePath = 'env/src/resources/cleanCode.pdf'
+    filePath = 'src/resources/cleanCode.pdf'
     pdf_text = get_pdf_text(filePath)
     # text_chunks = get_text_chunks(pdf_text)
     vectorDb = get_vectorDb(pdf_text)
