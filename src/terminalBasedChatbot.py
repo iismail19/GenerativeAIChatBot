@@ -1,9 +1,5 @@
 # Imports
 from langchain import VectorDBQA
-from langchain.chains import RetrievalQA
-import streamlit as st
-from dotenv import load_dotenv
-from PyPDF2 import PdfReader
 from langchain.document_loaders import PyPDFLoader
 from langchain.text_splitter import CharacterTextSplitter
 from langchain.embeddings import HuggingFaceInstructEmbeddings
