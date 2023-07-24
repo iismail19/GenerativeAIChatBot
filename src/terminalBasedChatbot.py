@@ -34,6 +34,7 @@ os.environ["HUGGINGFACEHUB_API_TOKEN"] = "<ENTER_KEY_HERE>"
 #             raw_text += text
 #     return raw_text
 
+
 def get_pdf_text(filePath):
     loader = PyPDFLoader(filePath)
     doc = loader.load()
@@ -42,23 +43,28 @@ def get_pdf_text(filePath):
     return chunks
 
 # Turn document to chunks
+
+
 def get_text_chunks(text):
     text_splitter = RecursiveCharacterTextSplitter(
         separators=["\n\n", "\n", ".", "!", "?", ",", " ", ""],
         chunk_size=1000,
         chunk_overlap=200,
         length_function=len
-     )
+    )
 
     chunks = text_splitter.split_text(text)
     return chunks
 
 # Convert to vector db
 
+
 def get_vectorDb(text_chunks):
-    embeddings = HuggingFaceInstructEmbeddings(model_name="sentence-transformers/all-mpnet-base-v2")
+    embeddings = HuggingFaceInstructEmbeddings(
+        model_name="sentence-transformers/all-mpnet-base-v2")
     vectorDb = Chroma.from_documents(text_chunks, embeddings)
     return vectorDb
+
 
 def get_conversation_chain(vectorDb, largeLangModel):
     memory = ConversationBufferMemory(
@@ -76,14 +82,17 @@ def main():
     pdf_text = get_pdf_text(filePath)
     # text_chunks = get_text_chunks(pdf_text)
     vectorDb = get_vectorDb(pdf_text)
-    largeLangModel = HuggingFaceHub(repo_id="google/flan-t5-xxl", model_kwargs={"temperature":0.5, "max_length":1024})
-    qa = VectorDBQA.from_chain_type(llm=largeLangModel, chain_type="stuff", vectorstore=vectorDb)
+    largeLangModel = HuggingFaceHub(
+        repo_id="google/flan-t5-xxl", model_kwargs={"temperature": 0.5, "max_length": 1024})
+    qa = VectorDBQA.from_chain_type(
+        llm=largeLangModel, chain_type="stuff", vectorstore=vectorDb)
     query = "What is clean code?"
     result = qa.run(query)
     print(result)
     query2 = "What is bad code?"
     result2 = qa.run(query2)
     print(result2)
+
 
 if __name__ == "__main__":
     main()
