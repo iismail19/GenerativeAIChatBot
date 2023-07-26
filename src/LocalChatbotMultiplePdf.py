@@ -33,6 +33,7 @@ def main():
                                         retriever=index.vectorstore.as_retriever(),
                                         input_key="question")
 
+    # Test
     print(chain.run('How many hours does an intern need to complete?'))
 
     print(chain.run('What is clean code?'))
